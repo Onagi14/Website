@@ -612,65 +612,68 @@ event_description: { type: String, required: true },
 location: { type: String, required: true },
 
 deadline: { type: Date, required: true },
-privacy: { type: String, enum: ['public', 'invite-only'], required: true }
-
+privacy: { type: String, enum: ['public', 'invite-only'], required: true },
+folder_name: { type: String, required: true }
 
 });
-
 const Event = mongoose.model('Event', eventSchema);
 
+
 app.post('/create_event', async (req, res) => {
-const { event_name, event_date, event_description, location, deadline, privacy } = req.body;
+    const { event_name, event_date, event_description, location, deadline, privacy } = req.body;
 
-// Check for required fields
-if (!event_name || !event_date || !event_description || !location ||  !deadline || !privacy) {
-    return res.status(400).json({ error: 'Missing required fields.' });
-}
+    // Check for required fields
+    if (!event_name || !event_date || !event_description || !location || !deadline || !privacy) {
+        return res.status(400).json({ error: 'Missing required fields.' });
+    }
 
-try {
-    // Create a new event instance
-    const newEvent = new Event({
-        event_name,
-        event_date,
-        event_description,
-        location,
-  
-        deadline,
-        privacy
-    });
+    try {
+        // Generate a folder name (you can modify this to use a custom structure if needed)
+        const folderName = event_name.replace(/\s+/g, '_'); // Example: Replace spaces with underscores
 
-    // Save the event to the database
-    await newEvent.save();
+        // Create a new event instance
+        const newEvent = new Event({
+            event_name,
+            event_date,
+            event_description,
+            location,
+            deadline,
+            privacy,
+            folder_name: folderName // Save the folder name in the database
+        });
 
-    // Create a directory for the event
-    const folderPath = path.join(__dirname, 'folder', event_name); // Adjust the path as needed
-    await fs.mkdir(folderPath, { recursive: true }); // Create the folder, allowing for recursive creation
+        // Save the event to the database
+        await newEvent.save();
 
-    res.status(200).json({ message: 'Event created successfully and folder created!' });
-} catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Failed to save event to the database or create folder.' });
-}
+        res.status(200).json({ message: 'Event created successfully, folder name stored in DB!' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Failed to save event to the database.' });
+    }
 });
-// List folders API
 app.get('/list_folders', async (req, res) => {
-const folderPath = path.join(__dirname, 'folder'); // Adjust this path as needed
-
-try {
-    // Read the contents of the directory
-    const folders = await fs.readdir(folderPath, { withFileTypes: true });
-    
-    // Filter out directories only
-    const folderNames = folders
-        .filter(dirent => dirent.isDirectory()) // Keep only directories
-        .map(dirent => dirent.name); // Get the names of directories
-
-    res.status(200).json(folderNames); // Send folder names as a response
-} catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Failed to list folders.' });
-}
+    try {
+        const events = await Event.find({}, 'folder_name'); // Fetch only the folder_name field
+        const folderNames = events.map(event => event.folder_name); // Extract folder names
+        res.status(200).json(folderNames); // Send folder names as a response
+    } catch (error) {
+        console.error('Error fetching folder names:', error);
+        res.status(500).json({ error: 'Failed to fetch folder names' });
+    }
 });
+
+
+    // API endpoint to get folder names
+app.get('/get_folders', async (req, res) => {
+    try {
+        const events = await Event.find({}, 'event_name'); // Fetch only event names
+        const folderNames = events.map(event => event.event_name); // Extract event names
+        res.json(folderNames); // Send folder names as response
+    } catch (error) {
+        console.error('Error fetching folders:', error);
+        res.status(500).json({ error: 'Failed to fetch folders' });
+    }
+    });
 
 
 
