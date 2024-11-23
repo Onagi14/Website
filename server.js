@@ -15,7 +15,7 @@ const app = express();
 const multer = require('multer');
 const port = 3001;
 
-app.use(cors());
+app.use(cors({ origin: 'https://website-i6to.onrender.com' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -186,7 +186,7 @@ try {
     await user.save(); // Save the user with the token and expiry
 
     // Construct the reset link with query parameters
-    const resetLink = `http://localhost:3001/reset-password?token=${resetToken}&email=${email}`;
+    const resetLink = `https://website-i6to.onrender.com/reset-password?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
     await transporter.sendMail({
@@ -1112,7 +1112,7 @@ try {
     await user.save(); // Save the user with the token and expiry
 
     // Construct the reset link with query parameters
-    const resetLink = `http://localhost:3001/reset-adminpassword?token=${resetToken}&email=${email}`;
+    const resetLink = `https://website-i6to.onrender.com/reset-adminpassword?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
     await transporter.sendMail({
@@ -1199,7 +1199,7 @@ try {
     await user.save(); // Save the user with the token and expiry
 
     // Construct the reset link with query parameters
-    const resetLink = `http://localhost:3001/reset-profpassword?token=${resetToken}&email=${email}`;
+    const resetLink = `https://website-i6to.onrender.com/reset-profpassword?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
     await transporter.sendMail({
