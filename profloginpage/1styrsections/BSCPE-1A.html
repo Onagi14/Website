@@ -126,7 +126,7 @@
         // Function to load folders dynamically
         async function loadFolders() {
             try {
-                const response = await fetch('http://localhost:3001/get_folders');
+                const response = await fetch('https://website-i6to.onrender.com/get_folders');
                 if (!response.ok) throw new Error('Failed to fetch folders.');
 
                 const folders = await response.json();

@@ -198,7 +198,7 @@
     formData.append("eventImage", document.getElementById("event-image").files[0]);
 
     try {
-        const response = await fetch('http://localhost:3001/api/create-event', {
+        const response = await fetch('https://website-i6to.onrender.com/api/create-event', {
             method: 'POST',
             body: formData,
         });
