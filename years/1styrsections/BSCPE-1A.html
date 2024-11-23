@@ -110,41 +110,51 @@
     <script>
         // Function to load folders dynamically
         async function loadFolders() {
-    try {
-        console.log('Fetching folders...'); // Debugging log
-        const response = await fetch('https://website-i6to.onrender.com/get_folders');
-        if (!response.ok) throw new Error('Failed to fetch folders.');
+            try {
+                const response = await fetch('https://website-i6to.onrender.com/get_folders');
+                if (!response.ok) throw new Error('Failed to fetch folders.');
 
-        const folders = await response.json();
-        console.log('Fetched folders:', folders); // Log the response
-        const folderList = document.getElementById('folder-list');
-        folderList.innerHTML = ''; // Clear previous entries
+                const folders = await response.json();
+                const folderList = document.getElementById('folder-list');
+                folderList.innerHTML = ''; // Clear previous entries
 
-        folders.forEach(folder => {
-            const folderDiv = document.createElement('div');
-            folderDiv.className = 'folder';
+                folders.forEach(folder => {
+                    const folderDiv = document.createElement('div');
+                    folderDiv.className = 'folder';
 
-            const folderName = document.createElement('div');
-            folderName.className = 'folder-title';
-            folderName.textContent = folder;
-            folderDiv.appendChild(folderName);
+                    // Create folder name text
+                    const folderName = document.createElement('div');
+                    folderName.className = 'folder-title'; // Add class for styling
+                    folderName.textContent = folder;
+                    folderDiv.appendChild(folderName);
 
-            const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
-            deleteButton.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                await deleteFolder(folder, folderDiv);
-            });
+                    // Create delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', async (e) => {
+                        e.stopPropagation(); // Prevent folder click event
+                        await deleteFolder(folder, folderDiv); // Pass folderDiv to delete it from DOM
+                    });
 
-            folderDiv.appendChild(deleteButton);
+                    folderDiv.appendChild(deleteButton);
 
-            folderDiv.addEventListener('click', () => fetchAttendees(folder));
-            folderList.appendChild(folderDiv);
-        });
-    } catch (error) {
-        console.error('Error loading folders:', error);
-    }
-}
+                    // Add click event to fetch attendees for the selected folder
+                    folderDiv.addEventListener('click', () => fetchAttendees(folder));
+
+                    // Add hover effect
+                    folderDiv.addEventListener('mouseenter', () => {
+                        folderDiv.style.transform = 'scale(1.05)';
+                    });
+                    folderDiv.addEventListener('mouseleave', () => {
+                        folderDiv.style.transform = 'scale(1)';
+                    });
+
+                    folderList.appendChild(folderDiv);
+                });
+            } catch (error) {
+                console.error('Error loading folders:', error);
+            }
+        }
 
         // Function to delete a folder and remove it from the DOM
         async function deleteFolder(folderName, folderDiv) {
