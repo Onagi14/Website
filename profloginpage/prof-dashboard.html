@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendee List Access</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Add your CSS here */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+            background-color: #5f6974;
+        }
+
+        .sidebar {
+            width: 190px;
+            background-color: #343a40;
+            padding: 20px;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sidebar h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .profile {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .profile i {
+            font-size: 60px;
+            color: #dcdcdc;
+            margin-bottom: 10px;
+        }
+
+        .profile p {
+            color: #dcdcdc;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #dcdcdc;
+            padding: 12px;
+            text-decoration: none;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+            width: 100%;
+            text-align: center;
+        }
+
+        .sidebar a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 250px; /* Account for fixed sidebar width */
+            height: max-content;
+        }
+
+        .content {
+            padding: 20px;
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:first-of-type {
+            background-color: #007BFF;
+        }
+
+        button:nth-of-type(2) {
+            background-color: #28A745;
+        }
+
+        button:nth-of-type(3) {
+            background-color: #FFC107;
+            color: black;
+        }
+
+        button:nth-of-type(4) {
+            background-color: #DC3545;
+        }
+
+        .sidebar a:last-of-type {
+            margin-top: 310px;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
+    <script>
+        // Function to check if the user is authenticated
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                // If no token is found, redirect to login page
+                alert('User not logged in');
+                window.location.href = 'proflogin.html';
+                return false;
+            }
+            return true;
+        }
+
+        function loadYearPage(year) {
+            document.getElementById('yearPage').innerHTML = `<iframe src="${year}-year.html" width="100%" height="500px"></iframe>`;
+        }
+
+        // Function to load the profile details from the server
+        function loadProfileDetails() {
+            const token = localStorage.getItem('token');
+            fetch('http://localhost:3001/api/get_professor_details', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const profileName = data.fullname || 'Loading...';
+                document.getElementById('profile-name').textContent = profileName;
+            })
+            .catch(error => {
+                console.error('Error loading profile:', error);
+                document.getElementById('profile-name').textContent = 'Error loading profile';
+            });
+        }
+
+        // Call checkAuth and loadProfileDetails on page load
+        window.onload = function() {
+            if (checkAuth()) {
+                loadProfileDetails();
+            }
+        };
+    </script>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <h2>Professor</h2>
+        <!-- Profile Section -->
+        <div class="profile">
+            <i class="fas fa-user-circle"></i> <!-- Font Awesome User Icon -->
+            <p id="profile-name">Loading...</p>
+        </div>
+        <!-- Log Out Button -->
+        <a href="proflogin.html">Log Out</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2>Attendee List Access</h2>
+        
+        <!-- Automatically displayed content for Attendee Lists -->
+        <div class="content">
+            <p>Select a year to view the attendee list. Export functionality (CSV/Excel) can be implemented later.</p>
+            <!-- Buttons for selecting the year -->
+            <button onclick="loadYearPage('1st')">1st Year</button>
+            <button onclick="loadYearPage('2nd')">2nd Year</button>
+            <button onclick="loadYearPage('3rd')">3rd Year</button>
+            <button onclick="loadYearPage('4th')">4th Year</button>
+
+            <!-- Placeholder for loading the specific year page -->
+            <div id="yearPage"></div>
+        </div>
+    </div>
+
+</body>
+</html>

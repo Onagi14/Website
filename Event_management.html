@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100%;
+            background-color: #2c3e50;
+            color: white;
+            padding-top: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar a:hover, .sidebar .active {
+            background-color: #3498db;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Event Form Styles */
+        .upcoming_event {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .upcoming_event h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* Form Group Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Responsive Styling */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <h2>Event Portal</h2>
+        <a href="dashboard.html">Dashboard Overview</a>
+        <a href="Event_management.html">Event Creation</a>
+        <a href="upcoming_event.html">Create Upcoming Events</a>
+        <a href="eventREgistration.html">Event Registration Management</a>
+        <a href="attendance.html">Manage Reminders</a>
+        <a href="#" onclick="logout()">Logout</a>
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="dashboard-section">
+            <h2>Create New Event</h2>
+            <form id="event-form">
+                <!-- Event Form Fields -->
+                <label for="event-name">Event Name</label>
+                <input type="text" id="event-name" name="event_name" required>
+
+                <label for="event-date">Date & Time</label>
+                <input type="datetime-local" id="event-date" name="event_date" required>
+
+                <label for="event-desc">Event Description</label>
+                <textarea id="event-desc" name="event_description" rows="4" required></textarea>
+
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" required>
+
+            
+
+                <label for="deadline">Registration Deadline</label>
+                <input type="datetime-local" id="deadline" name="deadline" required>
+
+                <label for="privacy">Event Privacy</label>
+                <select id="privacy" name="privacy">
+                    <option value="public">Public</option>
+                    <option value="invite-only">Invite Only</option>
+                </select>
+
+                <button type="submit">Create Event</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+         window.onload = function() {
+        // Check if the user is logged in by verifying the token in localStorage
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            alert('You need login first.')
+            window.location.href = 'adminlogin.html';
+        } else {
+            // Optionally, you can verify the token here by making a request to your backend
+            // If the token is invalid, you can force a redirect back to login page
+
+            fetch('http://localhost:3001/verify-token', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // If the token is invalid, redirect to the login page
+                    window.location.href = 'adminlogin.html';
+                }
+            })
+            .catch(error => {
+                // If there's an error with the token verification request, handle it gracefully
+                console.error("Error verifying token:", error);
+                window.location.href = 'adminlogin.html';
+            });
+        }
+    }
+        document.getElementById('event-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent the default form submission
+    
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+
+            // Save to localStorage
+// Save to localStorage
+const events = JSON.parse(localStorage.getItem('events')) || [];
+events.push(data); // Store the entire event object
+localStorage.setItem('events', JSON.stringify(events));
+
+
+            try {
+                const response = await fetch('http://localhost:3001/create_event', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+    
+                if (response.ok) {
+                    alert('Event created successfully!');
+                    e.target.reset(); // Clear the form data
+                    setTimeout(() => {
+                        location.reload(); // Reload the page
+                    }, 500); // Optional delay to allow form reset
+                } else {
+                    alert('Failed to create event.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while creating the event.');
+            }
+        });
+        function logout() {
+        localStorage.removeItem('token');
+        window.location.href = 'adminlogin.html';
+    }
+    </script>
+    
+</body>
+</html>

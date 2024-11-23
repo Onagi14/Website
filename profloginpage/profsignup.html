@@ -1,0 +1,114 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Professor Sign Up - Event Management Portal</title>
+        <link rel="stylesheet" href="profsignup.css">
+        <style>
+            #errorMessage {
+                color: red;
+                font-weight: bold;
+                margin-top: 10px;
+            }
+            .success-message {
+                color: green;
+                font-weight: bold;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="signup-wrapper">
+            <div class="signup-container">
+                <div class="logo">
+                    <img src="logo.png" alt="Event Management Logo">
+                </div>
+                <h2>Create Your Professor Account</h2>
+                <p>Join us to manage your event registrations easily</p>
+                <form id="adminsignup-form">
+                    <input type="hidden" name="user_type" value="admin">
+                    <div class="input-flex">
+                        <div class="left-column">
+                            <div class="input-group">
+                                <input type="text" name="fullname" placeholder="Fullname" required>
+                            </div>
+                            <div class="input-group">
+                                <input type="email" name="email" placeholder="Email" required>
+                            </div>
+                        </div>
+                        <div class="right-column">
+                            <div class="input-group">
+                                <input type="password" id="password" name="password" placeholder="Password" required>
+                            </div>
+                            <div class="input-group">
+                                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm Password" required>
+                            </div>
+                            <div class="actions">
+                                <button type="submit" class="btn">Sign Up</button>
+                            </div>
+                            <p class="login-link">Already have an account? <a href="proflogin.html">Login here</a></p>
+                        </div>
+                    </div>
+                    <div id="errorMessage"></div>
+                    <div id="successMessage" class="success-message"></div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            document.getElementById('adminsignup-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirm-password').value;
+        var errorMessageElement = document.getElementById('errorMessage');
+        var successMessageElement = document.getElementById('successMessage');
+
+        // Clear previous messages
+        errorMessageElement.textContent = '';
+        successMessageElement.textContent = '';
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            errorMessageElement.textContent = 'Passwords do not match.';
+            return;
+        }
+
+        const formData = new URLSearchParams(new FormData(this)).toString(); // Properly encode form data
+
+        // Log the form data to the console for debugging
+        console.log("Form Data Sent:", formData); // Check if all fields are captured
+
+        // Send the form data to the server
+        fetch('http://localhost:3001/submit_profsignup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded' // Set the content type to match backend expectations
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Unknown error occurred');
+                });
+            }
+            return response.text();
+        })
+        .then(message => {
+            console.log("Server Response:", message); // Log the server's response
+            successMessageElement.textContent = 'Signup successful! Redirecting to login...';
+            setTimeout(() => {
+                window.location.href = 'proflogin.html'; // Redirect to login page for students
+            }, 2000); // Delay the redirection to show success message
+        })
+        .catch(error => {
+            console.error('Error during signup:', error);
+            errorMessageElement.textContent = error.message || 'There was an issue with your signup. Please try again.';
+        });
+    });
+
+        </script>
+    </body>
+    </html>

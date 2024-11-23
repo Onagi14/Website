@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Colegio De Montalban Events</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Swiper.js CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <style>
+        head{
+            background-color: rgb(58, 58, 58);
+            background-image: url(bg.jpg);
+        }
+        /* Adding a simple animation to scale the background image */
+        .service-box:hover .service-image {
+            transform: scale(1.1);
+        }
+
+        /* Animation for hover effect */
+        .card:hover {
+            transform: translateY(-10px);
+              /* Smooth scrolling */
+
+              
+    .html {
+        scroll-behavior: smooth;
+    }
+        }
+
+        
+    </style>
+</head>
+<body class="bg-white-100">
+  
+    <!-- Header Section -->
+    <header class="bg-white shadow-md">
+        <div>
+            <nav class="container mx-auto flex justify-between items-center p-4 gap-4 shadow-md">
+                <div class="ps-24">
+                    <a href="#Home">
+                        <span><img class="w-12 md:w-26 lg:w-28" src="cdm.webp"></span>
+                    </a>
+                </div>
+                <!-- Hamburger Icon for Mobile View -->
+                <button class="md:hidden flex items-center text-gray-600" onclick="toggleMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <!-- Navigation Links -->
+                <ul id="navLinks" class="hidden md:flex space-x-6">
+                    <li><a href="#Home" class="text-white-600 hover:text-black"><strong>Home</strong></a></li>
+                    <li><a href="#About" class="text-white-600 hover:text-black"><strong>About</strong></a></li>
+                    <li><a href="#blogs" class="text-white-600 hover:text-black"><strong>Blog</strong></a></li>
+                    <li><a href="#contact" class="text-white-600 hover:text-black"><strong>Contact</strong></a></li>
+                    
+                </ul>
+            </nav>
+        </div>
+        <style>     
+        header{
+            background: linear-gradient(to right, #f5f7f8, #0083b0);
+            color: white;
+          border-radius: 3px 0px;
+            width: 100%;
+            top: 0;
+            
+            
+        }</style>
+    </header>
+    
+    <style>
+        nav ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            background-color: #7c3aed;
+            padding: 8px 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: right;
+            width: 100%;
+            box-shadow: 0 2px 6px rgba(94, 94, 94, 0.171);
+
+
+        }
+    </style>
+    
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('hidden');
+        }
+    </script>
+    
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-cover bg-center h-screen" style="background-image: url('bg.jpg');">
+        <div class="bg-black bg-opacity-50 h-full flex flex-col justify-center items-center text-center text-white px-4">
+            <h6>Get Start!</h6>
+            <h1 class="text-5xl font-bold mb-4">Event Attendance Management System</h1>
+            <p class="leading-relaxed mb-10">Efficient attendance management transforms chaos into clarity, ensuring every event runs like clockwork.</p>
+            <p class="leading-relaxed mb-10">Download the App below to get started with managing your event's attendance effortlessly.</p>
+
+            <a href="#" class="bg-violet-600 hover:bg-violet-700 text-white py-3 px-6 rounded-md text-lg font-medium">Download Now!</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="About" class="py-20 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">About Us</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-2">
+          At [Your Company Name], we are passionate about simplifying event management. Our mission is to provide event organizers with a seamless, efficient, and reliable platform to manage registrations, track attendance, and engage with attendees effortlessly.</p>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-10">With a focus on cutting-edge technology and user-centered design, we’ve created an all-in-one solution that handles everything from registration and QR code generation to real-time attendance tracking and detailed reporting. Whether it’s a small corporate meeting or a large-scale conference, our system ensures that event management is streamlined, organized, and stress-free.</p>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-10">We believe that organizing an event should be about creating memorable experiences, not wrestling with logistics. That's why our platform is designed to take care of the details, giving you more time to focus on what matters – delivering a great event.</p>   
+            <p class="text-gray-600 max-w-2xl mx-auto mb-10">Join us as we revolutionize how events are managed, and let us help you make your next event a success!</p>
+            <button class="bg-violet-600 hover:bg-violet-700 text-white px-9 py-3 rounded-md capitalize font-bold 
+              hover:ocacity-80 ease-in duration-200 mb-20">See More...</button>
+        </div>
+
+        <!-- Mission, Vision, Core Values Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <!-- Mission Card (Yellow Background) -->
+            <div class="card relative bg-yellow-600 rounded-lg shadow-lg p-6 transform transition-transform duration-300 hover:shadow-2xl">
+                <div class="absolute inset-0 bg-black bg-opacity-30 rounded-lg"></div> <!-- Dark overlay -->
+
+                <div class="relative z-10 text-center text-white">
+                    <h3 class="text-2xl font-bold mb-4">MISSION</h3>
+                    <p>
+                        Our mission is to empower event organizers by providing an innovative and 
+                        user-friendly platform that simplifies the process of managing registrations, 
+                        tracking attendance, and enhancing attendee engagement. We strive to make every 
+                        event seamless, organized, and impactful, ensuring that the focus stays on delivering 
+                        memorable experiences.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Vision Card (Blue Background) -->
+            <div class="card relative bg-blue-600 rounded-lg shadow-lg p-6 transform transition-transform duration-300 hover:shadow-2xl">
+                <div class="absolute inset-0 bg-black bg-opacity-30 rounded-lg"></div> <!-- Dark overlay -->
+
+                <div class="relative z-10 text-center text-white">
+                    <h3 class="text-2xl font-bold mb-4">VISION</h3>
+                    <p>
+                        Our vision is to revolutionize the event management industry by becoming 
+                        the leading solution for attendance tracking and event management. We aim to 
+                        set the standard for technological excellence, helping organizers worldwide 
+                        create efficient, data-driven, and engaging events that leave a lasting impression 
+                        on every attendee.
+
+
+                    </p>
+                </div>
+            </div>
+
+            <!-- Vision Card (Blue Background) -->
+            <div class="card relative bg-red-600 rounded-lg shadow-lg p-6 transform transition-transform duration-300 hover:shadow-2xl">
+                <div class="absolute inset-0 bg-black bg-opacity-30 rounded-lg"></div> <!-- Dark overlay -->
+
+                <div class="relative z-10 text-center text-white">
+                    <h3 class="text-2xl font-bold mb-4">CORE VALUES</h3>
+                    
+                        <p> We continuously explore new technologies and ideas to improve the event management experience.</p>
+                        <p>Simplicity: We believe in creating intuitive, easy-to-use solutions that save time and effort for event organizers.</p>
+                        <p>Reliability: Our platform is built to ensure consistent performance, providing a dependable system for every event.</p>
+                        <p>Customer-Centricity: We prioritize the needs of our users, ensuring that our tools are designed to support them in delivering successful events.</p>
+                        
+                    
+                </div>
+
+                
+            </div>  
+            </div>
+
+            
+        </div>
+        
+        <!-- Add FontAwesome Icons (optional) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    </section>
+    <br><br><br>
+        <!-- Blogs Section -->
+        <section id="blogs" class="py-20 bg-gray-100">
+          <div class="container mx-auto px-4 text-center">
+              <h2 class="text-3xl font-bold text-gray-800 mb-6">Blogs</h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <img src="wawa.jpg" alt="Card Image" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">Wawa Dam</h3>
+                        <p class="text-gray-600 mb-4">Wawa Dam, located in Rodriguez (formerly Montalban), Rizal, 
+                            is a popular spot for both locals and visitors thanks to its natural beauty and outdoor 
+                            activities. The dam is nestled at the foot of the Sierra Madre mountain range, surrounded by lush 
+                            greenery and rugged landscapes, making it an ideal destination for hiking, picnicking, and swimming 
+                            in the reservoir. It's also a great spot for photography with its stunning views of the water and 
+                            mountains.</p>
+                        <a href="wawa.html" class="text-gray-500 hover:text-gray-600 font-bold">Learn More</a>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <img src="daranak.png" alt="Card Image" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">Daranak Falls</h3>
+                        <p class="text-gray-600 mb-4">Daranak Falls is one of the most scenic and popular 
+                            natural attractions in Rizal, located in the nearby town of Tanay, but it’s 
+                            easily accessible from Rodriguez (Montalban). The waterfall is known for its cool, 
+                            clear waters that cascade into a large, natural pool at the base, perfect for 
+                            swimming or just relaxing by the water. Surrounded by lush greenery, the falls 
+                            offer a peaceful, refreshing escape into nature.</p>
+                        <a href="daranak.html" class="text-gray-500 hover:text-gray-600 font-bold">Learn More</a>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <img src="mesa.png.jpg" alt="Card Image" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">La Mesa Eco Park</h3>
+                        <p class="text-gray-600 mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis reprehenderit veniam eius earum ea. Neque
+                             vero vel obcaecati quis, natus, amet, impedit beatae suscipit quo hic at nemo nisi sint.</p>
+                        <a href="ecopark.html" class="text-gray-500 hover:text-gray-600 font-bold">Learn More</a>
+                    </div>
+                </div>
+
+
+            </div>
+
+                  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center"><br><br>
+                        <h2 class="text-base text-gray-700 font-semibold tracking-wide uppercase">Our Partners</h2>
+                    <br><br> </div>
+            
+                    <!-- Swiper Slider -->
+                    <div class="mt-10 swiper-container flex justify-center">
+                        <div class="swiper-wrapper">
+                            <!-- Partner 1 -->
+                            <div class="swiper-slide flex justify-center">
+                                <img class="h-12" src="dave.jpg" alt="Partner 1 Logo">
+                                <p>
+                                    Igano, Dave L.
+                                </p>
+                            </div>
+                            <!-- Partner 2 -->
+                            <div class="swiper-slide flex justify-center">
+                                <img class="h-12" src="imben.jpg" alt="Partner 2 Logo">
+                                <p>
+                                    Miral, Myrben
+                                </p>
+                            </div>
+                            <!-- Partner 3 -->
+                            <div class="swiper-slide flex justify-center">
+                                <img class="h-12" src="arjun.jpeg" alt="Partner 3 Logo"><br>
+                                <p>  Jose John, Mangila</p>
+                            </div>
+                            <!-- Partner 4 -->
+                            <div class="swiper-slide flex justify-center">
+                                <img class="h-12" src="mc.png" alt="Partner 4 Logo">
+                                <p> Mc Arthur, Flores</p>
+                            </div>
+                            <!-- Partner 5 -->
+                            <div class="swiper-slide flex justify-center">
+                                <img class="h-12" src="shan.jpg" alt="Partner 5 Logo">
+                                <p>
+                                    Peñaflor, Shaen Michael
+                                </p>
+                            </div>
+                            <!-- Partner 6 -->
+                            <div class="swiper-slide flex justify-center">
+                                <img class="h-12" src="gen.jpg" alt="Partner 6 Logo">
+                                <p> Pingol, Mark Genesis</p>
+                            </div>
+                            <style>
+                               .h-12{
+                                    border-radius: 50%;
+                                    margin-right: 20px;
+                                    margin-top: -10px;
+                                    border: solid;
+                                    border-width: 3px;
+                                    border-color: #ffffffe6;
+                                }
+                            </style>
+                        </div>
+            
+                        <!-- Swiper Navigation -->
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <style>
+            /* Adding a simple animation to scale the background image */
+        .service-box:hover .service-image {
+            transform: scale(1.1);
+        }
+
+        /* Animation for hover effect */
+        .card:hover {
+            transform: translateY(-10px);
+              /* Smooth scrolling */}
+            </style>
+      </section>
+
+      <!-- Swiper.js JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 6, // Display 4 logos at a time
+        spaceBetween: 30, // Space between logos
+        loop: true, // Loop the slides
+        autoplay: {
+            delay: 2500, // Auto-slide every 2.5 seconds
+            disableOnInteraction: false, // Continue autoplay after interaction
+        },
+
+        breakpoints: {
+            640: {
+                slidesPerView: 2, // 2 logos on small screens
+            },
+            768: {
+                slidesPerView: 3, // 3 logos on medium screens
+            },
+            1024: {
+                slidesPerView: 4, // 4 logos on large screens
+            },
+        },
+    });
+</script>
+
+    
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Message Us</h2>
+            <form class="max-w-lg mx-auto">
+                <div class="mb-4">
+                    <input type="text" placeholder="Your Name" class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div class="mb-4">
+                    <input type="email" placeholder="Your Email" class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+                </div>
+                <div class="mb-4">
+                    <textarea placeholder="Your Message" class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"></textarea>
+                </div>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-md text-lg font-medium">Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-white-800 text-gray-700 py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2024 JVD Travel and Tours. All rights reserved.</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <a href="#" class="hover:text-blue-400">Facebook</a>
+                <a href="#" class="hover:text-blue-400">Twitter</a>
+                <a href="#" class="hover:text-blue-400">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

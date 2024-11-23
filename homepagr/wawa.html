@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wawa Dam Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h1>Wawa Dam Blog</h1>
+            <nav>
+                <ul>
+                    <li><a href="homepage.html">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#activities">Things to Do</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <style>
+            nav ul li a {
+                color: #ffffff;
+                text-decoration: none;
+                background-color: #7c3aede6;
+                padding: 6px 10px;
+                margin-bottom: 8px;
+                border-radius: 13px;
+                display: flex;
+                justify-content: right;
+                box-shadow: 0 2px 6px rgba(62, 7, 78, 0.842);
+            }</style>
+        </div>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>About Wawa Dam</h2>
+            <p>Wawa is a popular outdoor destination, only about an hour's drive from Cubao. 
+                It's known for its challenging rock climbing walls, historical caves and abandoned dam 
+                facility (which is now an artificial waterfall). Instead of feeling kawawa (pitiful) having 
+                nowhere to go last Holy Week, I dragged my family to Montalban to see this interesting place. 
+                We drove from Marikina, so it only took us some 45 minutes to get there.</p>
+            <p>From the passenger seat, I observed the concrete commercial buildings of Marikina transform 
+                into old colonial houses in San Mateo before morphing into shanties built on the foot of Sierra 
+                Madre in Rodriguez. A minimal entrance fee was collected at the entrance gate. We paid P20 for the 
+                vehicle, plus P2 per adult person.</p>
+            <div class="image-container">
+                <img src="wawa.jpg" alt="wawa dam" class="responsive-img">
+            </div>
+        </section>
+
+        <section id="activities">
+            <h2>Things to Do at Wawa Dam</h2>
+            <ul>
+                <p>Wawa Dam in Rodriguez, Rizal, is a hidden gem that offers a variety of outdoor activities perfect for nature lovers, history buffs, and adventure seekers alike. Whether you're looking to relax or explore, there are plenty of things to do in and around Wawa Dam. Here are some top activities to enjoy when visiting:</p>
+                <br>
+                <br>
+                <li><strong>1. Swimming and Water Activities </strong><br>
+
+                    The cool, clear waters of Wawa River are perfect for swimming, especially during the hot summer months. The river surrounding the dam is shallow in some areas, making it safe for kids and families to enjoy a refreshing dip.
+                    Tip: Be mindful of the current, as some parts of the river can be swift. It's a good idea to stay near the calmer areas for a more relaxing swim.</li>
+                <li>Picnicking by the falls</li>
+                <li>Hiking around the area</li>
+                <li>Photography of the stunning landscape</li>
+            </ul>
+            <div class="image-container">
+                <img src="images/daranak2.jpg" alt="Daranak Falls - Swimming" class="responsive-img">
+            </div>
+        </section>
+
+        <section id="gallery">
+            <h2>Gallery</h2>
+            <div class="gallery">
+                <img src="images/daranak3.jpg" alt="Daranak Falls - Scenic View" class="gallery-img">
+                <img src="images/daranak1.jpg" alt="Daranak Falls - Waterfall" class="gallery-img">
+                <img src="images/daranak2.jpg" alt="Daranak Falls - Close-up" class="gallery-img">
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p>If you have any questions or would like more information, feel free to reach out!</p>
+            <form>
+                <input type="text" id="name" placeholder="Your Name">
+                <input type="email" id="email" placeholder="Your Email">
+                <textarea id="message" placeholder="Your Message"></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Daranak Falls Blog. All rights reserved.</p>
+    </footer>
+
+    <style>/* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        
+        header {
+            background-color: #c4c4c4;
+            color: white;
+            padding: 1rem 0;
+        }
+        
+        .navbar h1 {
+            text-align: center;
+            margin: 0;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 10px 0;
+        }
+        
+        nav ul li {
+            margin: 0 15px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+        
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        
+        main {
+            padding: 20px;
+        }
+        
+        section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        ul {
+            margin-left: 20px;
+        }
+        
+        ul li {
+            margin-bottom: 10px;
+        }
+        
+        .image-container {
+            margin-top: 20px;
+        }
+        
+        .responsive-img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        
+        .gallery {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .gallery-img {
+            width: 32%;
+            height: auto;
+            border-radius: 8px;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        form input, form textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        form button {
+            padding: 10px;
+            border: none;
+            background-color: #7c3aede6;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        form button:hover {
+            background-color: #1a073ae6;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        </style>
+    <script>
+        // This JavaScript can be used for interactive features in the future
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("Daranak Falls Blog Loaded!");
+});
+
+    </script>
+</body>
+</html>

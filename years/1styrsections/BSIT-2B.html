@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSIT-2B Attendees</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+        }
+        .folder-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .folder {
+            width: 150px; /* Adjust folder width */
+            height: 100px; /* Adjust folder height */
+            background-color: #ffd700; /* Folder color */
+            border: 2px solid #daA520; /* Folder border color */
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative; /* Position for tab effect */
+            text-align: center;
+            padding-top: 10px; /* Space for folder name */
+        }
+        .folder:hover {
+            transform: scale(1.05);
+        }
+        .folder::before {
+            content: '';
+            position: absolute;
+            top: -20px; /* Adjusts the tab position */
+            left: 10px; /* Adjusts the tab position */
+            width: 50px; /* Tab width */
+            height: 20px; /* Tab height */
+            background-color: #ffd700; /* Same as folder color */
+            border: 2px solid #daA520; /* Same as folder border color */
+            border-bottom: none; /* No bottom border for tab effect */
+            border-radius: 2px 2px 0 0; /* Rounded top corners */
+        }
+        .folder-title {
+            font-weight: bold;
+            color: #333;
+        }
+        .folder button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff4757;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            display: none; /* Hide button inside folder */
+        }
+        .folder:hover button {
+            display: block; /* Show button on hover */
+        }
+        .folder button:hover {
+            background-color: #e84118; /* Darken button color on hover */
+        }
+        .attendee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .attendee-table th, .attendee-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .attendee-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .attendee-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .attendee-table tr:hover {
+            background-color: #ddd;
+        }
+        .attendee-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Attendees in BSIT-2B</h1>
+    <h2>Event Folders</h2>
+    <div id="folder-list" class="folder-container"></div>
+    
+    <h2>Attendee List</h2>
+    <div id="attendee-list"></div>
+
+    <script>
+        // Function to load folders dynamically
+        async function loadFolders() {
+            try {
+                const response = await fetch('http://localhost:3001/get_folders');
+                if (!response.ok) throw new Error('Failed to fetch folders.');
+
+                const folders = await response.json();
+                const folderList = document.getElementById('folder-list');
+                folderList.innerHTML = ''; // Clear previous entries
+
+                folders.forEach(folder => {
+                    const folderDiv = document.createElement('div');
+                    folderDiv.className = 'folder';
+
+                    // Create folder name text
+                    const folderName = document.createElement('div');
+                    folderName.className = 'folder-title'; // Add class for styling
+                    folderName.textContent = folder;
+                    folderDiv.appendChild(folderName);
+
+                    // Create delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', async (e) => {
+                        e.stopPropagation(); // Prevent folder click event
+                        await deleteFolder(folder, folderDiv); // Pass folderDiv to delete it from DOM
+                    });
+
+                    folderDiv.appendChild(deleteButton);
+
+                    // Add click event to fetch attendees for the selected folder
+                    folderDiv.addEventListener('click', () => fetchAttendees(folder));
+
+                    // Add hover effect
+                    folderDiv.addEventListener('mouseenter', () => {
+                        folderDiv.style.transform = 'scale(1.05)';
+                    });
+                    folderDiv.addEventListener('mouseleave', () => {
+                        folderDiv.style.transform = 'scale(1)';
+                    });
+
+                    folderList.appendChild(folderDiv);
+                });
+            } catch (error) {
+                console.error('Error loading folders:', error);
+            }
+        }
+
+        // Function to delete a folder and remove it from the DOM
+        async function deleteFolder(folderName, folderDiv) {
+            try {
+                const response = await fetch(`http://localhost:3001/delete_folder/${folderName}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error);
+                }
+
+                const result = await response.json();
+                alert(result.message);
+
+                // Remove the folder from the DOM if successfully deleted
+                folderDiv.remove();
+            } catch (error) {
+                console.error('Error deleting folder:', error.message);
+                alert(`Error deleting folder: ${error.message}`);
+            }
+        }
+
+        // Function to fetch and display attendees for a specific event
+        async function fetchAttendees(eventName) {
+            try {
+                const response = await fetch(`http://localhost:3001/api/attendees/${eventName}`);
+
+                if (!response.ok) {
+                    throw new Error("No attendees found for this event.");
+                }
+
+                const attendees = await response.json();
+                const filteredAttendees = attendees.filter(attendee => attendee.section === 'BSIT-2B');
+                displayAttendees(filteredAttendees);
+            } catch (error) {
+                document.getElementById('attendee-list').innerHTML = `<p class="attendee-message">${error.message}</p>`;
+            }
+        }
+
+        // Function to display the list of attendees in a table format
+        function displayAttendees(attendees) {
+            const attendeeList = document.getElementById('attendee-list');
+            attendeeList.innerHTML = ''; // Clear previous attendees
+
+            if (attendees.length === 0) {
+                attendeeList.innerHTML = '<p class="attendee-message">No attendees found for BSIT-2B    .</p>';
+                return;
+            }
+
+            // Create a table for attendees
+            const table = document.createElement('table');
+            table.className = 'attendee-table';
+
+            // Create the table header
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = `
+                <th>Name</th>
+                <th>Email</th>
+                <th>Student ID</th>
+                <th>Event</th>
+                <th>Year</th>
+                <th>Section</th>
+                <th>Date</th>
+            `;
+            table.appendChild(headerRow);
+
+            // Create rows for each attendee
+            attendees.forEach(attendee => {
+                const attendeeRow = document.createElement('tr');
+                attendeeRow.innerHTML = `
+                    <td>${attendee.name}</td>
+                    <td>${attendee.email}</td>
+                    <td>${attendee.studentID}</td>
+                    <td>${attendee.event_name}</td>
+                    <td>${attendee.year}</td>
+                    <td>${attendee.section}</td>
+                    <td>${new Date(attendee.Register_Date).toLocaleString()}</td>
+                `;
+                table.appendChild(attendeeRow);
+            });
+
+            attendeeList.appendChild(table);
+        }
+
+        // Load folders on page load
+        loadFolders();
+    </script>
+</body>
+</html>

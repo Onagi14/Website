@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Events</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100%;
+            background-color: #2c3e50;
+            color: white;
+            padding-top: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar a:hover, .sidebar .active {
+            background-color: #3498db;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Event Form Styles */
+        .upcoming_event {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .upcoming_event h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* Form Group Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Responsive Styling */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <h2>Event Portal</h2>
+        <a href="dashboard.html" >Dashboard Overview</a>
+        <a href="Event_management.html">Event Creation</a>
+        <a href="upcoming_event.html">Create Upcoming Events</a>
+        <a href="eventRegistration.html">Event Registration Management</a>
+        <a href="attendance.html">Manage Reminders</a>
+        <a href="#" onclick="logout()">Logout</a>
+
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="upcoming_event">
+            <h2>Create Upcoming Event</h2>
+
+            <!-- Event Post Form -->
+            <form id="event-form" enctype="multipart/form-data" class="event-form">
+                <div class="form-group">
+                    <label for="event-title">Event Title</label>
+                    <input type="text" id="event-title" name="eventTitle" placeholder="Enter event title" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="event-description">Event Description</label>
+                    <textarea id="event-description" name="eventDescription" rows="4" placeholder="Enter event description" required></textarea>
+                </div>
+            
+                <!-- Add Event Date Field -->
+                <div class="form-group">
+                    <label for="event-date">Event Date</label>
+                    <input type="date" id="event-date" name="eventDate" required>
+                </div>
+            
+                <!-- Add Event Time Field -->
+                <div class="form-group">
+                    <label for="event-time">Event Time</label>
+                    <input type="time" id="event-time" name="eventTime" required>
+                </div>
+            
+                <!-- Add Event Location Field -->
+                <div class="form-group">
+                    <label for="event-location">Event Location</label>
+                    <input type="text" id="event-location" name="eventLocation" placeholder="Enter event location" required>
+                </div>
+            
+                <!-- Event Image Upload -->
+                <div class="form-group">
+                    <label for="event-image">Add Image</label>
+                    <input type="file" id="event-image" name="eventImage" accept="image/*" required>
+                </div>
+            
+                <button type="submit" class="submit-btn">Create Event</button>
+            </form>
+            
+            
+            
+        </div>
+    </div>
+
+    <script>
+
+
+
+       document.getElementById("event-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("eventTitle", document.getElementById("event-title").value);
+    formData.append("eventDescription", document.getElementById("event-description").value);
+    formData.append("eventDate", document.getElementById("event-date").value);  // Add event date
+    formData.append("eventTime", document.getElementById("event-time").value);  // Add event time
+    formData.append("eventLocation", document.getElementById("event-location").value);  // Add event location
+    formData.append("eventImage", document.getElementById("event-image").files[0]);
+
+    try {
+        const response = await fetch('http://localhost:3001/api/create-event', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            alert('Event created successfully!');
+            window.location.href = 'browse-events.html';
+        } else {
+            alert('Failed to create event');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error occurred while creating the event');
+    }
+});
+function logout() {
+        localStorage.removeItem('token');
+        window.location.href = 'adminlogin.html';
+    }
+
+
+
+
+
+
+    window.onload = function() {
+        // Check if the user is logged in by verifying the token in localStorage
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            alert('You need login first.');
+            window.location.href = 'adminlogin.html';
+        } else {
+            // Optionally, you can verify the token here by making a request to your backend
+            // If the token is invalid, you can force a redirect back to login page
+
+            fetch('http://localhost:3001/verify-token', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    alert('You need login first.')
+                    window.location.href = 'adminlogin.html';
+                }
+            })
+            .catch(error => {
+                // If there's an error with the token verification request, handle it gracefully
+                console.error("Error verifying token:", error);
+                window.location.href = 'adminlogin.html';
+            });
+        }
+    }
+
+    </script>
+
+</body>
+</html>

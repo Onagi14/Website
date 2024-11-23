@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSIT-2C Attendees</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+        }
+        .folder-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .folder {
+            width: 150px;
+            height: 100px;
+            background-color: #ffd700;
+            border: 2px solid #daA520;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+            text-align: center;
+            padding-top: 10px;
+        }
+        .folder:hover {
+            transform: scale(1.05);
+        }
+        .folder::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 10px;
+            width: 50px;
+            height: 20px;
+            background-color: #ffd700;
+            border: 2px solid #daA520;
+            border-bottom: none;
+            border-radius: 2px 2px 0 0;
+        }
+        .folder-title {
+            font-weight: bold;
+            color: #333;
+        }
+        .folder button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff4757;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            display: none;
+        }
+        .folder:hover button {
+            display: block;
+        }
+        .folder button:hover {
+            background-color: #e84118;
+        }
+        .attendee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .attendee-table th, .attendee-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .attendee-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .attendee-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .attendee-table tr:hover {
+            background-color: #ddd;
+        }
+        .attendee-message {
+            color: red;
+        }
+        #export-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #export-button:hover {
+            background-color: #218838;
+        }
+    </style>
+    <!-- Include SheetJS library -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <h1>Attendees in BSIT-2C</h1>
+    <h2>Event Folders</h2>
+    <div id="folder-list" class="folder-container"></div>
+    
+    <h2>Attendee List</h2>
+    <button id="export-button" style="display:none;">Export to Excel</button>
+    <div id="attendee-list"></div>
+
+    <script>
+        // Function to load folders dynamically
+        async function loadFolders() {
+            try {
+                const response = await fetch('http://localhost:3001/get_folders');
+                if (!response.ok) throw new Error('Failed to fetch folders.');
+
+                const folders = await response.json();
+                const folderList = document.getElementById('folder-list');
+                folderList.innerHTML = ''; // Clear previous entries
+
+                folders.forEach(folder => {
+                    const folderDiv = document.createElement('div');
+                    folderDiv.className = 'folder';
+
+                    const folderName = document.createElement('div');
+                    folderName.className = 'folder-title';
+                    folderName.textContent = folder;
+                    folderDiv.appendChild(folderName);
+
+                    
+
+                    
+                    folderDiv.addEventListener('click', () => fetchAttendees(folder));
+                    folderList.appendChild(folderDiv);
+                });
+            } catch (error) {
+                console.error('Error loading folders:', error);
+            }
+        }
+
+        async function fetchAttendees(eventName) {
+            try {
+                const response = await fetch(`http://localhost:3001/api/attendees/${eventName}`);
+                if (!response.ok) throw new Error("No attendees found for this event.");
+
+                const attendees = await response.json();
+                const filteredAttendees = attendees.filter(attendee => attendee.section === 'BSIT-2C');
+                displayAttendees(filteredAttendees);
+            } catch (error) {
+                document.getElementById('attendee-list').innerHTML = `<p class="attendee-message">${error.message}</p>`;
+            }
+        }
+
+        function displayAttendees(attendees) {
+            const attendeeList = document.getElementById('attendee-list');
+            attendeeList.innerHTML = '';
+
+            if (attendees.length === 0) {
+                attendeeList.innerHTML = '<p class="attendee-message">No attendees found for BSIT-2C.</p>';
+                return;
+            }
+
+            const table = document.createElement('table');
+            table.className = 'attendee-table';
+
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = `
+                <th>Name</th>
+                <th>Email</th>
+                <th>Student ID</th>
+                <th>Event</th>
+                <th>Year</th>
+                <th>Section</th>
+                <th>Date</th>
+            `;
+            table.appendChild(headerRow);
+
+            attendees.forEach(attendee => {
+                const attendeeRow = document.createElement('tr');
+                attendeeRow.innerHTML = `
+                    <td>${attendee.name}</td>
+                    <td>${attendee.email}</td>
+                    <td>${attendee.studentID}</td>
+                    <td>${attendee.event_name}</td>
+                    <td>${attendee.year}</td>
+                    <td>${attendee.section}</td>
+                  <td>${new Date(attendee.Register_Date).toLocaleString()}</td>
+                `;
+                table.appendChild(attendeeRow);
+            });
+
+            attendeeList.appendChild(table);
+
+            // Show the export button
+            document.getElementById('export-button').style.display = 'block';
+        }
+
+        // Function to export table to Excel
+        function exportToExcel() {
+            const table = document.querySelector('.attendee-table');
+            if (!table) {
+                alert('No data available to export!');
+                return;
+            }
+
+            const wb = XLSX.utils.table_to_book(table, {sheet: "Attendees"});
+            XLSX.writeFile(wb, 'attendees_bsit_2C.xlsx');
+        }
+
+        // Add event listener to the export button
+        document.getElementById('export-button').addEventListener('click', exportToExcel);
+
+        // Load folders on page load
+        loadFolders();
+    </script>
+</body>
+</html>
