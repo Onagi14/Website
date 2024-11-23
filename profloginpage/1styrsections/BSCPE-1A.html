@@ -155,7 +155,7 @@
 
         async function fetchAttendees(eventName) {
             try {
-                const response = await fetch(`http://localhost:3001/api/attendees/${eventName}`);
+                const response = await fetch(`https://website-i6to.onrender.com/api/attendees/${eventName}`);
                 if (!response.ok) throw new Error("No attendees found for this event.");
 
                 const attendees = await response.json();
