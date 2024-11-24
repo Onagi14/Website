@@ -210,7 +210,7 @@
             // Optionally, you can verify the token here by making a request to your backend
             // If the token is invalid, you can force a redirect back to login page
 
-            fetch('http://localhost:3001/verify-token', {
+            fetch('https://website-f9gk.onrender.com/verify-token', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -252,7 +252,7 @@
                 }
     
                 try {
-                    const response = await fetch(`http://localhost:3001/api/attendees-by-month?startMonth=${startMonth}&endMonth=${endMonth}`, {
+                    const response = await fetch(`https://website-f9gk.onrender.com/api/attendees-by-month?startMonth=${startMonth}&endMonth=${endMonth}`, {
                         headers: {
                             'Authorization': `Bearer ${token}` // Send token for authentication
                         }
