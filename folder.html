@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Folders</title>
+    <style>
+        /* Add your styles here */
+    </style>
+</head>
+<body>
+
+    <h1>Event Folders</h1>
+    <div id="folder-list"></div>
+
+    <script>
+        // Function to load folders dynamically from the database
+        async function loadFolders() {
+            try {
+                const response = await fetch('http://localhost:3001/get_folders');
+                if (!response.ok) throw new Error('Failed to fetch folders.');
+
+                const folders = await response.json();
+                const folderList = document.getElementById('folder-list');
+                folderList.innerHTML = ''; // Clear previous folder entries
+
+                folders.forEach(folder => {
+                    const folderDiv = document.createElement('div');
+                    folderDiv.className = 'folder';
+                    folderDiv.textContent = folder; // Set folder name as text
+                    folderDiv.addEventListener('click', () => alert(`Folder: ${folder}`)); // Handle folder click
+                    folderList.appendChild(folderDiv);
+                });
+            } catch (error) {
+                console.error('Error loading folders:', error);
+            }
+        }
+
+        // Load folders when the page is loaded
+        window.onload = loadFolders;
+    </script>
+
+</body>
+</html>

@@ -15,7 +15,7 @@ const app = express();
 const multer = require('multer');
 const port = 3001;
 
-app.use(cors({ origin: 'https://website-i6to.onrender.com' }));
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -186,7 +186,7 @@ try {
     await user.save(); // Save the user with the token and expiry
 
     // Construct the reset link with query parameters
-    const resetLink = `https://website-i6to.onrender.com/reset-password?token=${resetToken}&email=${email}`;
+    const resetLink = `http://localhost:3001/reset-password?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
     await transporter.sendMail({
@@ -557,7 +557,6 @@ try {
 
 
 
-
 app.get('/verify-token', authenticateAdminToken, (req, res) => {
     res.status(200).json({ message: 'Token is valid' });
 });
@@ -612,44 +611,52 @@ event_description: { type: String, required: true },
 location: { type: String, required: true },
 
 deadline: { type: Date, required: true },
-privacy: { type: String, enum: ['public', 'invite-only'], required: true }
+privacy: { type: String, enum: ['public', 'invite-only'], required: true },
+folder_name: { type: String, required: true } // Store the folder name in the database
 
 
 });
 const Event = mongoose.model('Event', eventSchema);
+
+
+// Route to create an event and insert folder_name to database
 app.post('/create_event', async (req, res) => {
     const { event_name, event_date, event_description, location, deadline, privacy } = req.body;
     
     // Check for required fields
-    if (!event_name || !event_date || !event_description || !location ||  !deadline || !privacy) {
+    if (!event_name || !event_date || !event_description || !location || !deadline || !privacy) {
         return res.status(400).json({ error: 'Missing required fields.' });
     }
     
     try {
-        // Create a new event instance
+        // Create a folder name based on event name (You can adjust this as needed)
+        const folderName = event_name.replace(/\s+/g, '_').toLowerCase(); // Sanitize folder name
+        
+        // Create a new event instance with folder_name included
         const newEvent = new Event({
             event_name,
             event_date,
             event_description,
             location,
-      
             deadline,
-            privacy
+            privacy,
+            folder_name: folderName // Save the folder name in the database
         });
     
         // Save the event to the database
         await newEvent.save();
     
-        // Create a directory for the event
-        const folderPath = path.join(__dirname, 'folder', event_name); // Adjust the path as needed
-        await fs.mkdir(folderPath, { recursive: true }); // Create the folder, allowing for recursive creation
+        // Optional: Create a directory for the event (if you still want to keep it on the filesystem)
+        const folderPath = path.join(__dirname, 'folder', folderName);
+        await fs.mkdir(folderPath, { recursive: true });
     
-        res.status(200).json({ message: 'Event created successfully and folder created!' });
+        res.status(200).json({ message: 'Event created successfully with folder!' });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ error: 'Failed to save event to the database or create folder.' });
+        res.status(500).json({ error: 'Failed to save event to the database.' });
     }
-    });
+});
+
     // List folders API
     app.get('/list_folders', async (req, res) => {
     const folderPath = path.join(__dirname, 'folder'); // Adjust this path as needed
@@ -670,18 +677,16 @@ app.post('/create_event', async (req, res) => {
     }
     });
     
-    // API endpoint to get folder names
-app.get('/get_folders', async (req, res) => {
-    try {
-        const events = await Event.find({}, 'event_name'); // Fetch only event names
-        const folderNames = events.map(event => event.event_name); // Extract event names
-        res.json(folderNames); // Send folder names as response
-    } catch (error) {
-        console.error('Error fetching folders:', error);
-        res.status(500).json({ error: 'Failed to fetch folders' });
-    }
+    app.get('/get_folders', async (req, res) => {
+        try {
+            const events = await Event.find({}, 'folder_name'); // Fetch only folder names
+            const folderNames = events.map(event => event.folder_name); // Extract folder names
+            res.json(folderNames); // Send folder names as response
+        } catch (error) {
+            console.error('Error fetching folders:', error);
+            res.status(500).json({ error: 'Failed to fetch folders' });
+        }
     });
-
 
 
 
@@ -1122,7 +1127,7 @@ try {
     await user.save(); // Save the user with the token and expiry
 
     // Construct the reset link with query parameters
-    const resetLink = `https://website-i6to.onrender.com/reset-adminpassword?token=${resetToken}&email=${email}`;
+    const resetLink = `http://localhost:3001/reset-adminpassword?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
     await transporter.sendMail({
@@ -1209,7 +1214,7 @@ try {
     await user.save(); // Save the user with the token and expiry
 
     // Construct the reset link with query parameters
-    const resetLink = `https://website-i6to.onrender.com/reset-profpassword?token=${resetToken}&email=${email}`;
+    const resetLink = `http://localhost:3001/reset-profpassword?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
     await transporter.sendMail({
@@ -1301,10 +1306,10 @@ const upload = multer({ storage: storage });
 // Parse JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
 app.post('/api/create-event', upload.single('eventImage'), async (req, res) => {
     const { eventTitle, eventDescription, eventDate, eventTime, eventLocation } = req.body;
-    const eventImage = req.file ? req.file.path : null; // Multer's file path
+    const eventImage = req.file ? `/uploads/${req.file.filename}` : null;
 
     console.log('Form Data:', req.body);
     console.log('Uploaded File:', req.file);

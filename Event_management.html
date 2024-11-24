@@ -179,7 +179,7 @@
             // Optionally, you can verify the token here by making a request to your backend
             // If the token is invalid, you can force a redirect back to login page
 
-            fetch('https://website-i6to.onrender.com/verify-token', {
+            fetch('http://localhost:3001/verify-token', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -187,7 +187,7 @@
             })
             .then(response => {
                 if (!response.ok) {
-                    // If the token is invalid, redirect to the login page
+                   
                     window.location.href = 'adminlogin.html';
                 }
             })
@@ -212,7 +212,7 @@ localStorage.setItem('events', JSON.stringify(events));
 
 
             try {
-                const response = await fetch('https://website-i6to.onrender.com/create_event', {
+                const response = await fetch('http://localhost:3001/create_event', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

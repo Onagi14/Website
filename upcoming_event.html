@@ -107,7 +107,8 @@
         }
 
         /* Responsive Styling */
-        @media (max-width: 768px) {
+        /* Small screens (phones) */
+        @media (max-width: 600px) {
             .sidebar {
                 width: 200px;
             }
@@ -115,7 +116,61 @@
             .main-content {
                 margin-left: 210px;
             }
+
+            .upcoming_event {
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            .sidebar a {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .submit-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
         }
+
+        /* Medium screens (tablets) */
+        @media (min-width: 601px) and (max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 230px;
+            }
+
+            .upcoming_event {
+                max-width: 80%;
+            }
+
+            .sidebar a {
+                font-size: 15px;
+            }
+
+            .submit-btn {
+                font-size: 15px;
+            }
+        }
+
+        /* Large screens (laptops/desktops) */
+        @media (min-width: 1025px) {
+            .sidebar {
+                width: 250px;
+            }
+
+            .main-content {
+                margin-left: 260px;
+            }
+
+            .upcoming_event {
+                max-width: 600px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -123,14 +178,12 @@
     <!-- Sidebar Navigation -->
     <div class="sidebar">
         <h2>Event Portal</h2>
-        <a href="dashboard.html" >Dashboard Overview</a>
+        <a href="dashboard.html">Dashboard Overview</a>
         <a href="Event_management.html">Event Creation</a>
         <a href="upcoming_event.html">Create Upcoming Events</a>
         <a href="eventREgistration.html">Event Registration Management</a>
         <a href="attendance.html">Manage Reminders</a>
         <a href="#" onclick="logout()">Logout</a>
-
-
     </div>
 
     <!-- Main Content -->
@@ -176,85 +229,68 @@
             
                 <button type="submit" class="submit-btn">Create Event</button>
             </form>
-            
-            
-            
         </div>
     </div>
 
     <script>
+        document.getElementById("event-form").addEventListener("submit", async function (e) {
+            e.preventDefault();
 
+            const formData = new FormData();
+            formData.append("eventTitle", document.getElementById("event-title").value);
+            formData.append("eventDescription", document.getElementById("event-description").value);
+            formData.append("eventDate", document.getElementById("event-date").value);
+            formData.append("eventTime", document.getElementById("event-time").value);
+            formData.append("eventLocation", document.getElementById("event-location").value);
+            formData.append("eventImage", document.getElementById("event-image").files[0]);
 
+            try {
+                const response = await fetch('http://localhost:3001/api/create-event', {
+                    method: 'POST',
+                    body: formData,
+                });
 
-       document.getElementById("event-form").addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("eventTitle", document.getElementById("event-title").value);
-    formData.append("eventDescription", document.getElementById("event-description").value);
-    formData.append("eventDate", document.getElementById("event-date").value);  // Add event date
-    formData.append("eventTime", document.getElementById("event-time").value);  // Add event time
-    formData.append("eventLocation", document.getElementById("event-location").value);  // Add event location
-    formData.append("eventImage", document.getElementById("event-image").files[0]);
-
-    try {
-        const response = await fetch('https://website-i6to.onrender.com/api/create-event', {
-            method: 'POST',
-            body: formData,
+                if (response.ok) {
+                    alert('Event created successfully!');
+                    window.location.href = 'browse-events.html';
+                } else {
+                    alert('Failed to create event');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error occurred while creating the event');
+            }
         });
 
-        if (response.ok) {
-            alert('Event created successfully!');
-            window.location.href = 'browse-events.html';
-        } else {
-            alert('Failed to create event');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error occurred while creating the event');
-    }
-});
-function logout() {
-        localStorage.removeItem('token');
-        window.location.href = 'adminlogin.html';
-    }
-
-
-
-
-
-
-    window.onload = function() {
-        // Check if the user is logged in by verifying the token in localStorage
-        const token = localStorage.getItem('token');
-        
-        if (!token) {
-            alert('You need login first.');
+        function logout() {
+            localStorage.removeItem('token');
             window.location.href = 'adminlogin.html';
-        } else {
-            // Optionally, you can verify the token here by making a request to your backend
-            // If the token is invalid, you can force a redirect back to login page
-
-            fetch('https://website-i6to.onrender.com/verify-token', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    alert('You need login first.')
-                    window.location.href = 'adminlogin.html';
-                }
-            })
-            .catch(error => {
-                // If there's an error with the token verification request, handle it gracefully
-                console.error("Error verifying token:", error);
-                window.location.href = 'adminlogin.html';
-            });
         }
-    }
 
+        window.onload = function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('You need login first.');
+                window.location.href = 'adminlogin.html';
+            } else {
+                fetch('http://localhost:3001/verify-token', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        alert('You need login first.');
+                        window.location.href = 'adminlogin.html';
+                    }
+                })
+                .catch(error => {
+                    console.error("Error verifying token:", error);
+                    window.location.href = 'adminlogin.html';
+                });
+            }
+        }
     </script>
 
 </body>

@@ -161,7 +161,7 @@
             // Optionally, you can verify the token here by making a request to your backend
             // If the token is invalid, you can force a redirect back to login page
 
-            fetch('https://website-i6to.onrender.com/verify-token', {
+            fetch('http://localhost:3001/verify-token', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -186,7 +186,7 @@
             const message = document.getElementById('notificationMessage').value;
 
             try {
-                const response = await fetch('https://website-i6to.onrender.com/api/notifications/send', {
+                const response = await fetch('http://localhost:3000/api/notifications/send', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`,

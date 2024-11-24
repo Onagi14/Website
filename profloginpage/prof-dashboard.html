@@ -126,6 +126,7 @@
         }
     </style>
     <script>
+        
         // Function to check if the user is authenticated
         function checkAuth() {
             const token = localStorage.getItem('token');
@@ -145,7 +146,7 @@
         // Function to load the profile details from the server
         function loadProfileDetails() {
             const token = localStorage.getItem('token');
-            fetch('https://website-i6to.onrender.com/api/get_professor_details', {
+            fetch('http://localhost:3001/api/get_professor_details', {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token
