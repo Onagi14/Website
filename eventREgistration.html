@@ -193,7 +193,7 @@
             // Optionally, you can verify the token here by making a request to your backend
             // If the token is invalid, you can force a redirect back to login page
 
-            fetch('http://localhost:3001/verify-token', {
+            fetch('https://website-f9gk.onrender.com/verify-token', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -220,7 +220,7 @@
 
 
             document.addEventListener('DOMContentLoaded', () => {
-                fetch('http://localhost:3001/events')
+                fetch('https://website-f9gk.onrender.com/events')
                     .then(response => response.json())
                     .then(events => {
                         const eventsContainer = document.getElementById('events-container');
@@ -255,7 +255,7 @@
                     
                 };
 
-                fetch(`http://localhost:3001/events/${eventId}`, {
+                fetch(`https://website-f9gk.onrender.com/events/${eventId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -276,7 +276,7 @@
 
             function deleteEvent(eventId) {
                 if (confirm('Are you sure you want to delete this event?')) {
-                    fetch(`http://localhost:3001/events/${eventId}`, {
+                    fetch(`https://website-f9gk.onrender.com/events/${eventId}`, {
                         method: 'DELETE'
                     })
                     .then(response => response.json())
