@@ -107,14 +107,16 @@
         }
 
         /* Responsive Styling */
-        /* Small screens (phones) */
-        @media (max-width: 600px) {
+        /* Small screens (S) - Phones */
+        @media (max-width: 480px) {
             .sidebar {
-                width: 200px;
+                width: 180px;
+                padding: 10px;
             }
 
             .main-content {
-                margin-left: 210px;
+                margin-left: 150px;
+                padding: 10px;
             }
 
             .upcoming_event {
@@ -123,7 +125,7 @@
             }
 
             .sidebar a {
-                font-size: 14px;
+                font-size: 12px;
                 padding: 10px;
             }
 
@@ -133,8 +135,32 @@
             }
         }
 
-        /* Medium screens (tablets) */
-        @media (min-width: 601px) and (max-width: 1024px) {
+        /* Medium screens (M) - Tablets */
+        @media (min-width: 481px) and (max-width: 767px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+            }
+
+            .upcoming_event {
+                max-width: 90%;
+            }
+
+            .sidebar a {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .submit-btn {
+                font-size: 14px;
+            }
+        }
+
+        /* Large screens (L) - Tablets and Laptops */
+        @media (min-width: 768px) and (max-width: 1024px) {
             .sidebar {
                 width: 220px;
             }
@@ -156,7 +182,7 @@
             }
         }
 
-        /* Large screens (laptops/desktops) */
+        /* Extra-Large screens (Desktops) */
         @media (min-width: 1025px) {
             .sidebar {
                 width: 250px;
@@ -170,7 +196,6 @@
                 max-width: 600px;
             }
         }
-
     </style>
 </head>
 <body>
