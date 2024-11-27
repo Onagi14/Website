@@ -27,6 +27,7 @@ button {
     border-radius: 5px;
     font-size: 16px;
     transition: background-color 0.3s ease;
+   
 }
 
 button:hover {
@@ -148,35 +149,4 @@ input:focus, textarea:focus, select:focus {
     margin: 10px;
 }
 
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-    .sidebar {
-        width: 60px;
-    }
 
-    .sidebar a {
-        font-size: 14px;
-        padding-left: 10px;
-        text-align: center;
-    }
-
-    .main-content {
-        margin-left: 70px;
-        padding: 10px;
-    }
-
-    .stat-box {
-        width: 100%;
-        margin: 10px 0;
-    }
-
-    .dashboard-section {
-        padding: 15px;
-    }
-}
-
-@media screen and (max-width: 500px) {
-    .sidebar h2 {
-        display: none;
-    }
-}
