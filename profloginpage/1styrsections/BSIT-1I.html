@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BSIT-1A Attendees</title>
+    <title>BSIT-1I Attendees</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -114,7 +114,7 @@
 </head>
 <body>
 
-    <h1>Attendees in BSIT-1A</h1>
+    <h1>Attendees in BSIT-1I</h1>
     <h2>Event Folders</h2>
     <div id="folder-list" class="folder-container"></div>
     
@@ -159,7 +159,7 @@
                 if (!response.ok) throw new Error("No attendees found for this event.");
 
                 const attendees = await response.json();
-                const filteredAttendees = attendees.filter(attendee => attendee.section === 'BSIT-1A');
+                const filteredAttendees = attendees.filter(attendee => attendee.section === 'BSIT-1I');
                 displayAttendees(filteredAttendees);
             } catch (error) {
                 document.getElementById('attendee-list').innerHTML = `<p class="attendee-message">${error.message}</p>`;
@@ -171,7 +171,7 @@
             attendeeList.innerHTML = '';
 
             if (attendees.length === 0) {
-                attendeeList.innerHTML = '<p class="attendee-message">No attendees found for BSIT-1A.</p>';
+                attendeeList.innerHTML = '<p class="attendee-message">No attendees found for BSIT-1I.</p>';
                 return;
             }
 
@@ -219,7 +219,7 @@
             }
 
             const wb = XLSX.utils.table_to_book(table, {sheet: "Attendees"});
-            XLSX.writeFile(wb, 'attendees_bsit_1a.xlsx');
+            XLSX.writeFile(wb, 'attendees_bsit_1I.xlsx');
         }
 
         // Add event listener to the export button
