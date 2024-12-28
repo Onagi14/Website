@@ -100,7 +100,7 @@
 </head>
 <body>
 
-    <h1>Attendees in BSCPE-A</h1>
+    <h1>Attendees in BSCPE-3B</h1>
     <h2>Event Folders</h2>
     <div id="folder-list" class="folder-container"></div>
     
@@ -111,7 +111,7 @@
         // Function to load folders dynamically
         async function loadFolders() {
             try {
-                const response = await fetch('http://localhost:3001/get_folders');
+                const response = await fetch('https://website-f9gk.onrender.com/get_folders');
                 if (!response.ok) throw new Error('Failed to fetch folders.');
 
                 const folders = await response.json();
@@ -159,7 +159,7 @@
         // Function to delete a folder and remove it from the DOM
         async function deleteFolder(folderName, folderDiv) {
             try {
-                const response = await fetch(`http://localhost:3001/delete_folder/${folderName}`, {
+                const response = await fetch(`https://website-f9gk.onrender.com/delete_folder/${folderName}`, {
                     method: 'DELETE'
                 });
 
@@ -182,7 +182,7 @@
         // Function to fetch and display attendees for a specific event
         async function fetchAttendees(eventName) {
             try {
-                const response = await fetch(`http://localhost:3001/api/attendees/${eventName}`);
+                const response = await fetch(`https://website-f9gk.onrender.com/api/attendees/${eventName}`);
 
                 if (!response.ok) {
                     throw new Error("No attendees found for this event.");
