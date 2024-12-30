@@ -1127,7 +1127,7 @@ try {
     await user.save(); // Save the user with the token and expiry
 
     // Construct the reset link with query parameters
-    const resetLink = `http://localhost:3001/reset-adminpassword?token=${resetToken}&email=${email}`;
+    const resetLink = `https://website-f9gk.onrender.com/reset-adminpassword?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
     await transporter.sendMail({
