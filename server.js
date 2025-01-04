@@ -557,6 +557,7 @@ try {
 
 
 
+
 app.get('/verify-token', authenticateAdminToken, (req, res) => {
     res.status(200).json({ message: 'Token is valid' });
 });
@@ -611,82 +612,66 @@ event_description: { type: String, required: true },
 location: { type: String, required: true },
 
 deadline: { type: Date, required: true },
-privacy: { type: String, enum: ['public', 'invite-only'], required: true },
-folder_name: { type: String, required: true } // Store the folder name in the database
+privacy: { type: String, enum: ['public', 'invite-only'], required: true }
 
 
 });
+
 const Event = mongoose.model('Event', eventSchema);
 
-
-// Route to create an event and insert folder_name to database
 app.post('/create_event', async (req, res) => {
-    const { event_name, event_date, event_description, location, deadline, privacy } = req.body;
+const { event_name, event_date, event_description, location, deadline, privacy } = req.body;
+
+// Check for required fields
+if (!event_name || !event_date || !event_description || !location ||  !deadline || !privacy) {
+    return res.status(400).json({ error: 'Missing required fields.' });
+}
+
+try {
+    // Create a new event instance
+    const newEvent = new Event({
+        event_name,
+        event_date,
+        event_description,
+        location,
+  
+        deadline,
+        privacy
+    });
+
+    // Save the event to the database
+    await newEvent.save();
+
+    // Create a directory for the event
+    const folderPath = path.join(__dirname, 'folder', event_name); // Adjust the path as needed
+    await fs.mkdir(folderPath, { recursive: true }); // Create the folder, allowing for recursive creation
+
+    res.status(200).json({ message: 'Event created successfully and folder created!' });
+} catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Failed to save event to the database or create folder.' });
+}
+});
+// List folders API
+app.get('/list_folders', async (req, res) => {
+const folderPath = path.join(__dirname, 'folder'); // Adjust this path as needed
+
+try {
+    // Read the contents of the directory
+    const folders = await fs.readdir(folderPath, { withFileTypes: true });
     
-    // Check for required fields
-    if (!event_name || !event_date || !event_description || !location || !deadline || !privacy) {
-        return res.status(400).json({ error: 'Missing required fields.' });
-    }
-    
-    try {
-        // Create a folder name based on event name (You can adjust this as needed)
-        const folderName = event_name.replace(/\s+/g, '_').toLowerCase(); // Sanitize folder name
-        
-        // Create a new event instance with folder_name included
-        const newEvent = new Event({
-            event_name,
-            event_date,
-            event_description,
-            location,
-            deadline,
-            privacy,
-            folder_name: folderName // Save the folder name in the database
-        });
-    
-        // Save the event to the database
-        await newEvent.save();
-    
-        // Optional: Create a directory for the event (if you still want to keep it on the filesystem)
-        const folderPath = path.join(__dirname, 'folder', folderName);
-        await fs.mkdir(folderPath, { recursive: true });
-    
-        res.status(200).json({ message: 'Event created successfully with folder!' });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Failed to save event to the database.' });
-    }
+    // Filter out directories only
+    const folderNames = folders
+        .filter(dirent => dirent.isDirectory()) // Keep only directories
+        .map(dirent => dirent.name); // Get the names of directories
+
+    res.status(200).json(folderNames); // Send folder names as a response
+} catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Failed to list folders.' });
+}
 });
 
-    // List folders API
-    app.get('/list_folders', async (req, res) => {
-    const folderPath = path.join(__dirname, 'folder'); // Adjust this path as needed
-    
-    try {
-        // Read the contents of the directory
-        const folders = await fs.readdir(folderPath, { withFileTypes: true });
-        
-        // Filter out directories only
-        const folderNames = folders
-            .filter(dirent => dirent.isDirectory()) // Keep only directories
-            .map(dirent => dirent.name); // Get the names of directories
-    
-        res.status(200).json(folderNames); // Send folder names as a response
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Failed to list folders.' });
-    }
-    });
-    
-    app.get('/get_folders', async (req, res) => {
-        try {
-            const events = await Event.find({}, 'folder_name'); // Fetch only folder names
-            const folderNames = events.map(event => event.folder_name); // Extract folder names
-            res.json(folderNames); // Send folder names as response
-        } catch (error) {
-            console.error('Error fetching folders:', error);
-            res.status(500).json({ error: 'Failed to fetch folders' });
-        }
-    });
 
 
 
@@ -1127,7 +1112,7 @@ try {
     await user.save(); // Save the user with the token and expiry
 
     // Construct the reset link with query parameters
-    const resetLink = `https://website-f9gk.onrender.com/reset-adminpassword?token=${resetToken}&email=${email}`;
+    const resetLink = `http://localhost:3001/reset-adminpassword?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
     await transporter.sendMail({
@@ -1214,7 +1199,7 @@ try {
     await user.save(); // Save the user with the token and expiry
 
     // Construct the reset link with query parameters
-    const resetLink = `https://website-f9gk.onrender.com/reset-profpassword?token=${resetToken}&email=${email}`;
+    const resetLink = `http://localhost:3001/reset-profpassword?token=${resetToken}&email=${email}`;
 
     // Send email with reset link
     await transporter.sendMail({
