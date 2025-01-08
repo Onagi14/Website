@@ -611,8 +611,7 @@ event_date: { type: Date, required: true },
 event_description: { type: String, required: true },
 location: { type: String, required: true },
 
-deadline: { type: Date, required: true },
-privacy: { type: String, enum: ['public', 'invite-only'], required: true }
+deadline: { type: Date, required: true }
 
 
 });
@@ -620,10 +619,10 @@ privacy: { type: String, enum: ['public', 'invite-only'], required: true }
 const Event = mongoose.model('Event', eventSchema);
 
 app.post('/create_event', async (req, res) => {
-const { event_name, event_date, event_description, location, deadline, privacy } = req.body;
+const { event_name, event_date, event_description, location, deadline } = req.body;
 
 // Check for required fields
-if (!event_name || !event_date || !event_description || !location ||  !deadline || !privacy) {
+if (!event_name || !event_date || !event_description || !location ||  !deadline ) {
     return res.status(400).json({ error: 'Missing required fields.' });
 }
 
@@ -635,8 +634,8 @@ try {
         event_description,
         location,
   
-        deadline,
-        privacy
+        deadline
+        
     });
 
     // Save the event to the database
@@ -751,7 +750,7 @@ try {
 // Update Event Route
 app.put('/events/:eventId', async (req, res) => {
 const eventId = req.params.eventId;
-const { event_name, event_date, event_description, location, deadline, privacy } = req.body;
+const { event_name, event_date, event_description, location, deadline } = req.body;
 
 try {
     const event = await Event.findByIdAndUpdate(
@@ -762,8 +761,7 @@ try {
             event_description,
             location,
            
-            deadline,
-            privacy
+            deadline
         },
         { new: true }
     );
